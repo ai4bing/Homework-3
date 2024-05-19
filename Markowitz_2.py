@@ -98,7 +98,7 @@ class MyPortfolio:
         solution = []
         for i in range(n):
             a = model.getVarByName(f"w[{i}]")
-            print(f"w {i} = {a.X}")
+            # print(f"w {i} = {a.X}")
             solution.append(a.X)
 
         self.portfolio_weights.loc[:, assets] = solution
