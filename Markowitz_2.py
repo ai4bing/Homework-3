@@ -75,6 +75,34 @@ class MyPortfolio:
         TODO: Complete Task 4 Below
         """
 
+        Sigma = self.returns[assets].cov().values
+        mu = self.returns[assets].mean().values
+
+        n = len(assets)
+        model = gp.Model()
+        model.setParam("TimeLimit", 1 * 60)
+        w = model.addMVar(n, name="w", lb=-10, ub=1)
+        den = model.addVar(name="den", lb=0, ub=1000)
+        iden = model.addVar(name="iden", lb=0, ub=1000)
+        lin = model.addVar(name="lin")
+        wSw = w @ Sigma @ w
+
+        model.addConstr(den * den == wSw)
+        model.addConstr(lin == mu @ w)
+        model.addConstr(den * iden == 1)
+
+        model.setObjective(lin * iden, gp.GRB.MAXIMIZE)
+
+        model.optimize()
+
+        solution = []
+        for i in range(n):
+            a = model.getVarByName(f"w[{i}]")
+            print(f"w {i} = {a.X}")
+            solution.append(a.X)
+
+        self.portfolio_weights.loc[:, assets] = solution
+
         """
         TODO: Complete Task 4 Above
         """
