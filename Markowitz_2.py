@@ -80,7 +80,7 @@ class MyPortfolio:
 
         n = len(assets)
         model = gp.Model()
-        model.setParam("TimeLimit", 1 * 60)
+        model.setParam("TimeLimit", 200)
         w = model.addMVar(n, name="w", lb=-10, ub=1)
         den = model.addVar(name="den", lb=0, ub=1000)
         iden = model.addVar(name="iden", lb=0, ub=1000)
